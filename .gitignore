@@ -1,0 +1,13 @@
+# vscode files
+.vscode
+
+# build and i/o files
+*.out
+*.exe
+out
+in
+in.txt
+out.txt
+out1
+*.sol
+*.in
