@@ -2,12 +2,23 @@
 
 using namespace std;
 
-int main(){
-	int n = 5*1e5;
-	cout<<n<<endl;
-	for(int i = 0; i<n; i++){
-		if(!i) cout<<rand()%1000000+1;
-		else cout<<" "<<rand()%1000000+1;
+int remove(int a){
+	int acc = 0;
+	for(char e: to_string(a)){
+		acc+=e-'0';
 	}
-	cout<<endl;
+	return acc;
+}
+
+int main(){
+	int n = 1e9;
+	int m = 1e6;
+	int k = m;
+	int counter = 0;
+	while(n-m>0 && k>0){
+		k-=remove(k);
+		n-=m;
+		counter++;
+	}
+	cout<<n<<" "<<k<<" "<<counter<<endl;
 }
