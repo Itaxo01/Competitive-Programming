@@ -21,12 +21,12 @@ int main(){
 		bool anterior = false;
 		for(int i = 1; i<v.size(); i++){
 			int dif = v[i].first - atual;
-			atual = v[i].first;
 			if(v[i].second == 'S'){
 				if(anterior){
 					anterior = false;
 					continue;
 				}
+				atual = v[i].first;
 				v.erase(v.begin()+i);
 				i--;
 				if(dif>menor) menor = dif;
@@ -34,6 +34,7 @@ int main(){
 			} else{
 				anterior = false;
 				if(dif>menor) menor = dif;
+				atual = v[i].first;
 			}
 		}
 		atual = b;
