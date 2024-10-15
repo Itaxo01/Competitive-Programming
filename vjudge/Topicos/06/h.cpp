@@ -12,10 +12,9 @@ int edit(int s1, int t1, vector<vector<int>> &memo){
 	if(s[s1-1] == t[t1-1]){
 		return memo[s1][t1] = edit(s1-1, t1-1, memo);
 	}
-	return memo[s1][t1] = 1 + min({edit(s1, t1 - 1, memo), 
+	return memo[s1][t1] = 1 + min({edit(s1, t1 - 1, memo),
 								edit(s1 - 1, t1, memo),
 								edit(s1 - 1, t1-1, memo)});
-								
 }
 
 int main(){
