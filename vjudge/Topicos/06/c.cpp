@@ -1,40 +1,35 @@
 #include <bits/stdc++.h>
-#define int long long
+int a1;
 using namespace std;
+int solve(int a, int b, int w[], int p[]){
+	if(a>1800) a+=200;
+    
+	int dp[a + 1];
+    memset(dp, 0, sizeof(dp));
+    for (int i = 0; i < b ; i++){
+        for (int j = a; j >= w[i]; j--){            
+			if (dp[j - w[i]] > 0 || j == w[i])
+				dp[j] = max(dp[j], dp[j - w[i]] + p[i]);
+        }
+    }
+	int maxF = 0;
+	if (a1 > 1800 && a1<=2000){
+		maxF = *max_element(dp, dp + a1);
+		for (int j = 2001; j <= a; ++j)
+			maxF = max(maxF, dp[j]);
+    }else maxF = *max_element(dp, dp + a + 1);
+	
+    return maxF;
+}
 
-int a, b, c;
-
-bool check(int bm){
-	int anterior = bm & (1<<(a-1));
-	int grupos = 1;
-	int tamanho = 1;
-	for(int i = a-2; i>=0; i--){
-		if((bm & (1<<i))==anterior){
-			tamanho++;
-			if(tamanho>c) return false;
-		} else {
-			grupos++;
-			if(grupos>b) return false;
-			tamanho = 1;
+int main(){
+	int b;
+	while(cin>>a1>>b){
+		int p[b];
+		int w[b];
+		for(int i = 0; i<b; i++){
+			cin>>w[i]>>p[i];
 		}
-	}
-	if(grupos != b) return false;
-	return true;
-}
-
-int solve(){
-	int p = 1<<a;
-	int count = 0;
-	for(int i = 0; i<p; i++){
-		if(check(i)) count++;
-	}
-	return count;
-}
-
-signed main(){
-	while(cin>>a>>b>>c){
-		if(b*c>=a)
-			cout<<solve()<<endl;
-		else cout<<0<<endl;
+		cout<<solve(a1, b, w, p)<<endl;
 	}
 }
