@@ -12,6 +12,7 @@ int solve(int a, int b, int w[], int p[]){
 				dp[j] = max(dp[j], dp[j - w[i]] + p[i]);
         }
     }
+	
 	int maxF = 0;
 	if (a1 > 1800 && a1<=2000){
 		maxF = *max_element(dp, dp + a1);

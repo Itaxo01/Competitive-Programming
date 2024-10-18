@@ -24,10 +24,12 @@ int main(){
 				m[i][j] = M[i%a][j%a];
 			}
 		}
+
+		
 		for(int i = 0; i<3*a; i++){
 			for(int j = 0; j<3*a; j++){
 				printf("%2d ", m[i][j]);
 			}cout<<endl;
-		}
+		}cout<<endl;
 	}
 }
