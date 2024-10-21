@@ -12,23 +12,20 @@ int main(){
 	}
 	int sum = 6;
 	for(int x = 1; x<=n; x++){
-		int x0 = pow(x, 2);
-		int n1 = ceil(sqrt(n0 - x0));
+		int n1 = ceil(sqrt(n0 - pow(x, 2)));
 		for(int y = 1; y<=n1; y++){
-			int y0 = pow(y, 2);
-			int n2 = ceil(sqrt(n0 - x0 - y0));
+			int n2 = ceil(sqrt(n0 - pow(x, 2) - pow(y, 2)));
 			for(int z = 1; z<=n2; z++){
-				if(x0 + y0 + pow(z, 2) == n0){
+				if(pow(x, 2) + pow(y, 2) + pow(z, 2) == pow(n, 2)){
 					sum+=8;
 				}
 			}
 		}
 	}
 	for(int x = 1; x<=n; x++){
-		int x0 = pow(x, 2);
-		int n1 = ceil(sqrt(n0 - x0));
+		int n1 = ceil(sqrt(pow(n, 2) - pow(x, 2)));
 		for(int y = 1; y<=n1; y++){
-			if(x0 + pow(y, 2) == n0){
+			if(pow(x, 2) + pow(y, 2) == pow(n, 2)){
 				sum+=12;
 			}
 		}

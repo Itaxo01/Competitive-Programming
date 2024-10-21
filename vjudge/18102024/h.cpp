@@ -14,6 +14,6 @@ int main(){
 	for(int i = 0; i<q; i++){
 		int a; cin>>a;
 		int h, m, s; scanf("%d: %d: %d:", &h, &m, &s);
-		cout<<h<<" "<<m<<" "<<s<<endl;
+		
 	}
 }
