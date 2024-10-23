@@ -2,31 +2,64 @@
 
 using namespace std;
 
-bool verify(vector<int> &v){
-	for(int i = 1; i<v.size(); i++){
-		if(v[i-1]>v[i]) return false;
-	}
-	return true;
-}
+signed main() {
+    int tt;
+    cin >> tt;
+    while (tt--) {
+        int n, q;
+        cin >> n >> q;
+        vector<int> p(n);
+        for (int i = 0; i < n; i++)
+            cin >> p[i], p[i]--;
 
-int main(){
-	int n; cin>>n;
-	while(n--){
-		int a, b; cin>>a>>b;
-		vector<int> c(a);
-		for(int i = 0; i<a; i++){
-			cin>>c[a];
-		}
-		string s; cin>>s;
-		for(int i = 0; i<b; i++){
+        vector<int> alr(n, 0);
+        
+		alr[0] == (p[0] == 1);
+        int i = 0;
+        int currentPos = 0;
+        for (int num : p) {
+            
+            if (num > i) { 
+                i = max(i, num);
+            }
+            if (i == currentPos)
+                alr[i] = 1;
+            currentPos++;
+        }
 
-			int q; cin>>q;
-			if(s[q-1] == 'L') s[q-1] = 'R';
-			else s[q-1] = 'L';
+        string s;cin >> s;
 
-			
-			if(verify(c)) cout <<"YES"<<endl;
-			else cout<<"NO"<<endl;
-		}
-	}
+        set<int> locks;
+        for (int i = 0; i < n-1; i++) {
+            if (s[i] == 'L' && s[i+1] == 'R' && !alr[i]) locks.insert(i);
+        }
+
+        while (q--) {
+            int i;
+            cin >> i;
+            i--;
+
+            if (s[i] == 'L') {
+                s[i] = 'R';
+                if (locks.count(i)) locks.erase(i);
+                if (s[i-1] == 'L') {
+                    if (!alr[i-1]) locks.insert(i-1);
+                }
+            }
+
+            else {
+                s[i] = 'L';
+                if (locks.count(i-1)) locks.erase(i-1);
+                if (s[i+1] == 'R') {
+                    if (!alr[i]) locks.insert(i);
+                }
+
+            }
+            if (locks.size()) cout << "NO" << '\n';
+            else cout << "YES" << '\n';
+        }
+
+    }
+    
+    return 0;
 }
