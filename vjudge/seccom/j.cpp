@@ -1,43 +1,39 @@
 #include <bits/stdc++.h>
-#define int long long
+
 using namespace std;
 
-int max(vector<int> &v){
-	int maior = 0;
-	for(int e:v) maior = max(maior, e);
-	return maior;
+bool cmp(vector<int> a, vector<int> b){
+	return a[2]*a[1] > b[2]*b[1];
 }
 
-signed main(){
+int main(){
+	int co = 1;
 	while(true){
 		int n; cin>>n;
 		if(!n) break;
-		vector<vector<int>> blocos(n, vector<int>(3));
+		vector<vector<int>> blocos(3*n, vector<int>(3));
 		for(int i = 0; i<n; i++){
-			for(int j = 0; j<3; j++){
-				cin>>blocos[i][j];
-			}
+			int a, b, c; cin>>a>>b>>c;
+			blocos.push_back({a, min(b, c), max(b, c)});
+			blocos.push_back({b, min(a, c), max(a, c)});
+			blocos.push_back({c, min(b, a), max(b, a)});
 		}
-		pair<int, int> dp[n+1];
-		int init = max(blocos[0]);
-		for(int i = 0; i<=n; i++){
-			dp[i].first = init;
-			dp[i].second = 0;
-		}
-		for (int i = 1; i < n ; i++){
-			pair<bool, int> res = menor(blocos[i], blocos[dp[i-1].second]);
-			if(menor.first){
-				if(dp[i].first < dp[i-1].first+res.second){
-					dp[i].second = i;
-					dp[i].first = dp[i-1].first+res.second;
-				}
-			} else{
-				if(dp[i].first < dp[i-1].first){
-					dp[i] = dp[i-1];
+		sort(blocos.begin(), blocos.end(), cmp);
+		int dp[3*n+1];
+		memset(dp, 0, sizeof(dp));
+		int maior = 0;
+		for(int j = 1; j<=3*n; j++){
+			dp[j] = blocos[j-1][0];
+			for(int i = 1; i<j; i++){
+				if(blocos[i-1][1] > blocos[j-1][1] &&
+					 blocos[i-1][2] > blocos[j-1][2]){
+					dp[j] = max(dp[j], dp[i]+blocos[j-1][0]);
 				}
 			}
+			maior = max(maior, dp[j]);
 		}
-		cout<<dp[n].first<<endl;
+		// printf("Case %d: maximum height = %d\n", co++, maior);
+		cout<<maior<<endl;
 
 	}
 }
