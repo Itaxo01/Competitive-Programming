@@ -1,15 +1,18 @@
 #include <bits/stdc++.h>
+#define ll long long
 using namespace std;
 
 int main(){
 	int n; cin>>n;
 	while(n--){
-		long long a; cin>>a;
-		long long k = a;
-		long long counter = ((sqrt(1 + 4 * a)) - 1) / 2;
-		long long c1 = floor(counter-0.0000001);
-
-		cout<<k+c1+1<<endl;
-
+		ll a; cin>>a;
+		ll i = 0; ll f = 2e18;
+		while(i<f){
+			ll m = (i+f)/2;
+			ll t = m - floor(sqrt((long double)m));
+			if(t>=a) f = m;
+			else i = m+1;
+		}
+		cout<<(i+f)/2<<endl;
 	}
 }

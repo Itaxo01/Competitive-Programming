@@ -1,6 +1,14 @@
+import math
 n = int(input())
 for _ in range(n):
 	a = int(input())
-	k = a
-	c = int((((1+4*a)**0.5)-1.01)//2)
-	print(k+c+1)
+	i = 0
+	f = 2e18
+	while(i<f):
+		m = (i+f)//2
+		t = m-math.floor(m**0.5)
+		if(t>=a):
+			f = m
+		else:
+			i = m+1
+	print(int((i+f)//2))
