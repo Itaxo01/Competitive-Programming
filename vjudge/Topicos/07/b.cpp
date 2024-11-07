@@ -1,34 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int lis(vector<int> &v){
-	multiset<int> s;
-	for(int i = 0; i<v.size(); i++){
-		auto it = s.lower_bound(v[i]);
-		if (it != s.end()) s.erase(it);
-		s.insert(v[i]);
-	}
+inline int lis(int v, vector<int> &s){
+	auto it = lower_bound(s.begin(), s.end(), v)-s.begin();
+	if(it<s.size()) s[it] = v;
+	else s.push_back(v);
 	return s.size();
 }
 
 void dfs(int a, vector<vector<int>> &v, vector<int> &lis_,
-		 vector<bool> &visitados, vector<int> &w, 
-		 vector<int> &caminho) {
+		 vector<bool> &visitados, vector<int> &w, vector<int> s) {
     visitados[a] = true;
-	 caminho.push_back(w[a]);
-	 lis_[a] = lis(caminho);
+	lis_[a] = lis(w[a], s);
     for (int e : v[a]) {
         if (!visitados[e]) {
-            dfs(e, v, lis_, visitados, w, caminho);
+            dfs(e, v, lis_, visitados, w, s);
         }
     }
-	 caminho.pop_back();
 }
 
 
 signed main(){
-	ios::sync_with_stdio(0); cin.tie(0);
-	cout.tie(0);
+	ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+	
 	int a; cin>>a;
 	vector<vector<int>> adj(a);
 	for(int i = 0; i<a-1; i++){
@@ -43,10 +37,10 @@ signed main(){
 	}
 
 	vector<bool> visitados(a, false);
-	vector<int> caminho;
-
+	
 	vector<int> lis_(a);
-	dfs(0, adj, lis_, visitados, w, caminho);
+	vector<int> s;
+	dfs(0, adj, lis_, visitados, w, s);
 
 	for(int i = 1; i<a; i++){
 		if(i==1) cout<<lis_[i];
