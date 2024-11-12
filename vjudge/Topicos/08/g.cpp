@@ -5,7 +5,7 @@ int tamanho[250005];
 
 
 int find(int i){
-	if(parent[i] == -1) return i;
+	if(parent[i] == -1) return parent[i] = i;
 	return find(parent[i]);
 }
 
