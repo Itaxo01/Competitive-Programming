@@ -13,15 +13,17 @@ bool isValid(pair<pair<int, int>, pair<int, int>> &a, vector<vector<int>> &v, in
 	if(i>=0 && i<v.size() && j>=0 && j<v[0].size()){
 		if(i0 == i && j0 == j) return true;
 		else if(i0 == i) {
-			if(j < j0)
-				for(int k = j+1; k<=j0; k++) if(v[i][k] == 1) return false;
-			else 
+			if(j < j0){
+				for(int k = j; k<j0; k++) if(v[i][k] == 1) return false;
+			} else {
 				for(int k = j0+1; k<=j; k++) if(v[i][k] == 1) return false;
+			}
 		} else {
-			if(i < i0)
-				for(int k = i+1; k<=i0; k++) if(v[k][j] == 1) return false;
-			else
+			if(i < i0) {
+				for(int k = i; k<i0; k++) if(v[k][j] == 1) return false;
+			} else{
 				for(int k = i0+1; k<=i; k++) if(v[k][j] == 1) return false;
+			}
 		}
 		return true;
 	}
@@ -47,23 +49,18 @@ void printaM(vector<vector<int>> &v, pair<int, int> &a){
 
 int bfs(pair<int, int> a, pair<int, int> b, vector<vector<int>> &v, int d){
 	if(a == b) return 0;
-	queue<pair<pair<pair<int, int>, pair<int, int>>, vector<pair<pair<int, int>, pair<int, int>>>>> q;
+	queue<pair<pair<int, int>, pair<int, int>>> q;
 	vector<vector<vector<bool>>> visitados(v.size(), vector<vector<bool>>(v[0].size(),
 							vector<bool>(4, false)));
-	q.push({{a, {d, 0}}, {{a, {d, 0}}}});
+	q.push({a, {d, 0}});
 	while(!q.empty()){
 		auto p = q.front(); q.pop();
-		if(p.first.first == b) {
-			for(auto e: p.second) {
-				cout<<e.first.first<<" "<<e.first.second<<" "<<e.second.first<<" "<<e.second.second<<endl;
-				printaM(v, e.first); cout<<endl;
-			}
-			return p.first.second.second;
+		if(p.first == b) {
+			return p.second.second;
 		}
-		cout<<p.first.first.first<<" "<<p.first.first.second<<" "<<p.first.second.first<<" "<<p.first.second.second<<endl;
-		printaM(v, p.first.first); cout<<endl;
-
-		int i = p.first.first.first, j = p.first.first.second, d1 = p.first.second.first, p1 = p.first.second.second+1;
+		cout<<p.first.first<<" "<<p.first.second<<" "<<p.second.first<<" "<<p.second.second<<endl;
+		printaM(v, p.first); cout<<endl;
+		int i = p.first.first, j = p.first.second, d1 = p.second.first, p1 = p.second.second+1;
 		vector<pair<pair<int, int>, pair<int, int>>> vizinhos;
 		switch(d1){
 			case north:
@@ -88,8 +85,7 @@ int bfs(pair<int, int> a, pair<int, int> b, vector<vector<int>> &v, int d){
 				visitados[e.first.first][e.first.second][e.second.first] = true;
 				cout<<"vizinho: "<<e.first.first<<" "<<e.first.second<<" "<<e.second.first<<" "<<e.second.second<<endl;
 				printaM(v, e.first); cout<<endl;
-				vector<pair<pair<int, int>, pair<int, int>>> aux = p.second; aux.push_back(e);
-				q.push({e, aux});
+				q.push(e);
 			}
 		}
 	}
