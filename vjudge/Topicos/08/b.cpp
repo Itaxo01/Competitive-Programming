@@ -10,7 +10,7 @@ enum {
 
 bool isValid(pair<pair<int, int>, pair<int, int>> &a, vector<vector<int>> &v, int i0, int j0){
 	int i = a.first.first, j = a.first.second;
-	if(i>=0 && i<v.size() && j>=0 && j<v[0].size()){
+	if(i>0 && i<v.size()-1 && j>0 && j<v[0].size()-1){
 		if(i0 == i && j0 == j) return true;
 		else if(i0 == i) {
 			if(j < j0){
@@ -58,8 +58,8 @@ int bfs(pair<int, int> a, pair<int, int> b, vector<vector<int>> &v, int d){
 		if(p.first == b) {
 			return p.second.second;
 		}
-		cout<<p.first.first<<" "<<p.first.second<<" "<<p.second.first<<" "<<p.second.second<<endl;
-		printaM(v, p.first); cout<<endl;
+		// cout<<p.first.first<<" "<<p.first.second<<" "<<p.second.first<<" "<<p.second.second<<endl;
+		// printaM(v, p.first); cout<<endl;
 		int i = p.first.first, j = p.first.second, d1 = p.second.first, p1 = p.second.second+1;
 		vector<pair<pair<int, int>, pair<int, int>>> vizinhos;
 		switch(d1){
@@ -83,8 +83,8 @@ int bfs(pair<int, int> a, pair<int, int> b, vector<vector<int>> &v, int d){
 		for(auto e: vizinhos){
 			if(isValid(e, v, i, j) && !visitados[e.first.first][e.first.second][e.second.first]){
 				visitados[e.first.first][e.first.second][e.second.first] = true;
-				cout<<"vizinho: "<<e.first.first<<" "<<e.first.second<<" "<<e.second.first<<" "<<e.second.second<<endl;
-				printaM(v, e.first); cout<<endl;
+				// cout<<"vizinho: "<<e.first.first<<" "<<e.first.second<<" "<<e.second.first<<" "<<e.second.second<<endl;
+				// printaM(v, e.first); cout<<endl;
 				q.push(e);
 			}
 		}
@@ -117,6 +117,9 @@ int main(){
 		pair<int, int> inicio, fim;
 		cin>>inicio.first>>inicio.second>>fim.first>>fim.second;
 		string dir; cin>>dir;
+		// printaM(matriz, inicio);
+		// cout<<endl;
+		// printaM(matriz, fim);
 		int d;
 		if(dir == "north") d = north;
 		if(dir == "east") d = east;
