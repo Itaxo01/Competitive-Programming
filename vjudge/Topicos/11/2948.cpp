@@ -1,148 +1,103 @@
-// A C++ program to find convex hull of a set of points. Refer
-// https://www.geeksforgeeks.org/orientation-3-ordered-points/
-// for explanation of orientation()
 #include <bits/stdc++.h>
+#define ld long double
 #define EPS 1e-9
 using namespace std;
 
-struct Point
-{
-    double x, y;
+struct Point {
+    ld x, y;
+    Point(ld x = 0, ld y = 0): x(x), y(y) {}
+    bool operator < (const Point& p) const {
+        return x < p.x || (x == p.x && y < p.y);
+    }
+    bool operator == (const Point& p) const {
+        return x == p.x && y == p.y;
+    }
+    bool operator != (const Point& p) const {
+        return x != p.x || y != p.y;
+    }
 };
 
-// A global point needed for  sorting points with reference
-// to  the first point Used in compare function of qsort()
-Point p0;
-
-// A utility function to find next to top in a stack
-Point nextToTop(stack<Point> &S)
-{
-    Point p = S.top();
-    S.pop();
-    Point res = S.top();
-    S.push(p);
-    return res;
+ld cross(Point O, Point A, Point B){
+    return (A.x - O.x)*(B.y - O.y) - (A.y - O.y)*(B.x - O.x);
 }
 
-// A utility function to swap two points
-void swap(Point &p1, Point &p2)
-{
-    Point temp = p1;
-    p1 = p2;
-    p2 = temp;
+ld dist(Point A, Point B){
+    return pow(B.x-A.x, 2) + pow(B.y - A.y, 2);
 }
 
-// A utility function to return square of distance
-// between p1 and p2
-double distSq(Point p1, Point p2)
-{
-    return (p1.x - p2.x)*(p1.x - p2.x) +
-          (p1.y - p2.y)*(p1.y - p2.y);
+vector<Point> chullmenorigual3(vector<Point> &P){
+    int n = P.size();
+    if (n <= 1) return P;
+    if (n == 2) {
+        if(P[0] == P[1]) return {P[0]};
+        return P;
+    }
+    vector<Point> aux; aux.push_back(P[0]);
+    if(P[1] != P[0]) aux.push_back(P[1]);
+    if(P[2] != P[0] && P[2] != P[1]) aux.push_back(P[2]);
+    if(aux.size() == 3){
+        if(cross(aux[0], aux[1], aux[2]) != 0) return aux;
+        ld d1 = dist(aux[0], aux[1]);
+        ld d2 = dist(aux[0], aux[2]);
+        ld d3 = dist(aux[1], aux[2]);
+        if(d1 >= d2 && d2 >= d3) return {aux[0], aux[1]};
+        if(d2 >= d3) return {aux[0], aux[1]};
+        return {aux[1], aux[2]};            
+    }
+    return aux;
 }
 
-// To find orientation of ordered triplet (p, q, r).
-// The function returns following values
-// 0 --> p, q and r are collinear
-// 1 --> Clockwise
-// 2 --> Counterclockwise
-int orientation(Point p, Point q, Point r)
-{
-    double val = (q.y - p.y) * (r.x - q.x) -
-              (q.x - p.x) * (r.y - q.y);
+vector<Point> ConvexHull(vector<Point> &P){
+    int n = P.size(), k = 0;
+    if(n <= 3) return chullmenorigual3(P);
+    sort(P.begin(), P.end());
+    vector<Point> H(2*n);
 
-    if (fabs(val) < EPS) return 0;  // collinear
-    return (val > 0)? 1: 2; // clock or counterclock wise
-}
+    // Build lower hull
+    for (int i = 0; i < n; ++i){
+        while (k >= 2 && cross(H[k-2], H[k-1], P[i]) <= 0)
+            k--;
+        H[k++] = P[i];
+    }
 
-// A function used by library function qsort() to sort an array of
-// points with respect to the first point
-int compare(const void *vp1, const void *vp2)
-{
-   Point *p1 = (Point *)vp1;
-   Point *p2 = (Point *)vp2;
+    // Build upper hull
+    for (int i = n-2, t = k+1; i >= 0; --i){
+        while (k >= t && cross(H[k-2], H[k-1], P[i]) <= 0)
+            k--;
+        H[k++] = P[i];
+    }
 
-   // Find orientation
-   int o = orientation(p0, *p1, *p2);
-   if (o == 0)
-     return (distSq(p0, *p2) >= distSq(p0, *p1))? -1 : 1;
-
-   return (o == 2)? -1: 1;
-}
-
-// Prints convex hull of a set of n points.
-stack<Point> convexHull(Point points[], int n){
-   int menor = 0;
-   for(int i = 0; i<n; i++){
-      if(points[i].y < points[menor].y) menor = i;
-      else if(points[i].y == points[menor].y) {
-        if(points[i].x < points[menor].x) menor = i;
-      } 
-   }
-
-   // Place the bottom-most point at first position
-   swap(points[0], points[menor]);
-
-   p0 = points[0];
-   qsort(&points[1], n-1, sizeof(Point), compare);
-
-   int m = 1; // Initialize size of modified array
-   for (int i=1; i<n; i++)
-   {
-       while (i < n-1 && orientation(p0, points[i],
-                                    points[i+1]) == 0)
-          i++;
-
-       points[m] = points[i];
-       m++;  // Update size of modified array
-   }
-
-   if (m < 3) return;
-
-   stack<Point> S;
-   S.push(points[0]);
-   S.push(points[1]);
-   S.push(points[2]);
-
-   for (int i = 3; i < m; i++)
-   {
-      while (S.size()>1 && orientation(nextToTop(S), S.top(), points[i]) != 2)
-         S.pop();
-      S.push(points[i]);
-   }
-
-   // Now stack has the output points, print contents of stack
-   return S;
+    H.resize(k-1);
+    return H;
 }
 
 int main(){
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-    int n; cin>>n;
-    vector<Point> p(n);
-    for(int i = 0; i<n; i++){
-        ld a, b;
-        cin>>a>>b;
-        p[i] = Point(a, b);
-    }
-    int pivot = downmost(p);
-    swap(p[0], p[pivot]);
-    sort(p.begin() + 1, p.end(), cmp);
-    vector<Point> h = ConvexHull(p);
 
-    ld maior_dist = 0;
-    int m_i = -1, m_j = -1;
-    for(int i = 0; i<h.size(); i++){
-        for(int j = 0; j<h.size(); j++){
-            if(i == j) continue;
-            ld dist = distance(h[i], h[j]);
-            if(dist > maior_dist) {
-                maior_dist = dist;
-                m_i = i;
-                m_j = j;
+    int n; cin >> n;
+    vector<Point> points(n);
+    for(int i = 0; i < n; i++){
+        ld a, b; cin >> a >> b;
+        points[i] = Point(a, b);
+    }
+
+    vector<Point> hull = ConvexHull(points);
+    ld maior_dist = -1;
+    Point pi, pj;
+    int s = hull.size();
+    for(int i = 0; i<s; i++){
+        for (int j = 0; j<s; j++){
+            Point center = {(hull[i].x+hull[j].x)/2.0, (hull[i].y+hull[j].y)/2.0};
+            cout<<center.x<<" "<<center.y<<endl;
+            ld d = dist(hull[i], hull[j]);
+            if(d > maior_dist){
+                maior_dist = d;
+                pi = hull[i]; pj = hull[j];
             }
         }
     }
-    pair<ld, ld> center = {(h[m_i].x + h[m_j].x)/2.0, (h[m_i].y + h[m_j].y)/2.0};
-    ld radius = sqrt(maior_dist)/2.0;
-    ld circ = radius*2*3.14*4;
-    printf("%.2f %.2f %.2f %.2f\n", center.first, center.second, radius, circ); 
+    Point center = {(pi.x+pj.x)/2.0, (pi.y+pj.y)/2.0};
+    ld raio = sqrt(dist(center, pi));
+    ld circ = 3.14*4*2*raio;
+    printf("%.2Lf %.2Lf %.2Lf %.2Lf\n", center.x, center.y, raio, circ);
 }

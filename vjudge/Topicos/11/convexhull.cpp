@@ -1,96 +1,90 @@
 #include <bits/stdc++.h>
+#define ll long long
+#define EPS 1e-9
 using namespace std;
 
 struct Point {
-    long double x, y;
-    Point(long double x = 0, long double y = 0): x(x), y(y) {}
-    int half(){
-        return y < 0 || (y == 0 && x < 0);
+    ll x, y;
+    Point(ll x = 0, ll y = 0): x(x), y(y) {}
+    bool operator < (const Point& p) const {
+        return x < p.x || (x == p.x && y < p.y);
     }
-    bool operator != (Point a){
-        return x != a.x || y != a.y;
+    bool operator == (const Point& p) const {
+        return x == p.x && y == p.y;
+    }
+    bool operator != (const Point& p) const {
+        return x != p.x || y != p.y;
     }
 };
 
-struct Vec {
-    long double x, y;
-    Vec(Point a, Point b): x(b.x - a.x), y(b.y - a.y) {}
-};
-
-long double cross(Vec a, Vec b){
-    return a.x * b.y - a.y * b.x;
+ll cross(Point O, Point A, Point B){
+    return (A.x - O.x)*(B.y - O.y) - (A.y - O.y)*(B.x - O.x);
 }
 
-Point pivot = Point(0, 0);
+ll dist(Point A, Point B){
+    return pow(B.x-A.x, 2) + pow(B.y - A.y, 2);
+}
 
-int downmost(vector<Point> &p){
-    int ans = 0;
-    for(int i = 1; i<p.size(); i++){
-        if(p[i].y < p[ans].y || (p[i].y == p[ans].y && p[i].x < p[ans].x))
-            ans = i;
+vector<Point> chullmenorigual3(vector<Point> &P){
+    int n = P.size();
+    if (n <= 1) return P;
+    if (n == 2) {
+        if(P[0] == P[1]) return {P[0]};
+        return P;
     }
-    return ans;
+    vector<Point> aux; aux.push_back(P[0]);
+    if(P[1] != P[0]) aux.push_back(P[1]);
+    if(P[2] != P[0] && P[2] != P[1]) aux.push_back(P[2]);
+    if(aux.size() == 3){
+        if(cross(aux[0], aux[1], aux[2]) != 0) return aux;
+        ll d1 = dist(aux[0], aux[1]);
+        ll d2 = dist(aux[0], aux[2]);
+        ll d3 = dist(aux[1], aux[2]);
+        if(d1 >= d2 && d2 >= d3) return {aux[0], aux[1]};
+        if(d2 >= d3) return {aux[0], aux[1]};
+        return {aux[1], aux[2]};            
+    }
+    return aux;
 }
 
-bool cmp(Point a, Point b){
-    if (a.half() != b.half())
-        return a.half() < b.half();
-    return cross(Vec(pivot, a), Vec(pivot, b)) > 0;
-}
+vector<Point> ConvexHull(vector<Point> &P){
+    int n = P.size(), k = 0;
+    if(n <= 3) return chullmenorigual3(P);
+    sort(P.begin(), P.end());
+    vector<Point> H(2*n);
 
-int ccw(Point a, Point b, Point c){
-    return cross(Vec(a, b), Vec(a, c)) > 0;
-}
-
-vector<Point> ConvexHull(vector<Point> &p){
-    if(p.size() <= 3){
-        if(p.size() == 1) return p;
-        if(p.size() == 2) {
-            if(p[0] != p[1]) return p;
-            return {p[0]};
-        }
-        if((p[0] != p[1]) && (p[0] != p[2]) && (p[1] != p[2])){
-            if(ccw(p[0], p[1], p[2])) return p;
-            return {p[0], p[2]};
-        } else {
-            if(p[0] != p[1]) return {p[0], p[1]};
-            if(p[0] != p[2]) return {p[0], p[2]};
-            if(p[1] != p[2]) return {p[1], p[2]};
-            return {p[0]};
-        }
+    for (int i = 0; i < n; ++i){
+        while (k >= 2 && cross(H[k-2], H[k-1], P[i]) <= 0)
+            k--;
+        H[k++] = P[i];
     }
 
-    vector<Point> s;
-    s.push_back(p[0]); 
-    s.push_back(p[1]);
-    s.push_back(p[2]); 
-    int i = 3;
-    while(i < p.size()){
-        int j = s.size() -1;
-        if(ccw(s[j-1], s[j], p[i])) s.push_back(p[i++]);
-        else s.pop_back();
+    for (int i = n-2, t = k+1; i >= 0; --i){
+        while (k >= t && cross(H[k-2], H[k-1], P[i]) <= 0)
+            k--;
+        H[k++] = P[i];
     }
-    return s;
+
+    H.resize(k-1);
+    return H;
 }
 
 int main(){
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
     while(true){
-        int n; cin>>n;
+        int n; cin >> n;
         if(!n) break;
         vector<Point> points(n);
-        for(int i = 0; i<n; i++){
-            int a, b; cin>>a>>b;
+        for(int i = 0; i < n; i++){
+            ll a, b; cin >> a >> b;
             points[i] = Point(a, b);
         }
-        int p0 = downmost(points);
-        swap(points[0], points[p0]);
-        pivot = points[0];
-        
-        sort(++points.begin(), points.end(), cmp);
+
         vector<Point> hull = ConvexHull(points);
         cout<<hull.size()<<endl;
-        for(auto x: hull)
-            cout<<x.x<<" "<<x.y<<endl;
+        // sort(hull.begin(), hull.end());
+        for(auto e: hull){
+            cout<<e.x<<" "<<e.y<<endl;
+        }
     }
 }

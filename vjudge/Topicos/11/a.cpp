@@ -17,12 +17,21 @@ signed main(){
             cin>>p[i].first>>p[i].second;
         }
         int count = 0;
+        ll distances[a];
         for(int i = 0; i<a; ++i){
-            unordered_map<ll, int> d;
-            for(int j = 0; j<a; ++j){
-                int d_ = dist(p[i], p[j]);
-                count += d[d_]++;
+            for(int j = 0; j<a; ++j)
+                distances[j] = dist(p[i], p[j]);
+            sort(distances, distances+a);
+            
+            int rep = 1;
+            for(int j = 1; j<a; j++){
+                if(distances[j-1] == distances[j]) rep++;
+                else {
+                    count += (rep*(rep-1))/2;
+                    rep = 1;
+                }
             }
+            count += (rep*(rep-1))/2;
         }
         cout<<count<<endl;
     }
