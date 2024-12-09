@@ -2,8 +2,8 @@
 using namespace std;
 
 struct point {
-    double x, y;
-    
+    int x, y, id;
+
     bool operator == (point const& t) const {
         return x == t.x && y == t.y;
     }
@@ -12,10 +12,14 @@ struct point {
     }
 };
 
+bool cmp(point &a, point &b){
+    return a.id < b.id;
+}
+
 int orientation(point a, point b, point c) {
-    double v = a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y);
-    if (v < 0) return -1; // clockwise
-    if (v > 0) return +1; // counter-clockwise
+    int v = a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y);
+    if (v < 0) return 1; // clockwise
+    if (v > 0) return -1; // counter-clockwise
     return 0;
 }
 
@@ -56,23 +60,21 @@ void convex_hull(vector<point>& a, bool include_collinear = false) {
 }
 
 int main(){
-    int n; cin>>n;
-    vector<point> v(n);
-    for(int i = 0; i<n; i++){
-        cin>>v[i].x>>v[i].y;
-    }
-    convex_hull(v, true);
-    bool first = true;
+    while(true){
+        int n; cin>>n;
+        if(!n) break;
+        vector<point> v(n);
+        for(int i = 0; i<n; i++){
+            cin>>v[i].x>>v[i].y;
+            v[i].id = i+1;
+        }
+        convex_hull(v);
 
-    for(auto &p : v){
-        if(first){
-            first = false; 
-            cout<<p.x<<" "<<p.y;
-        } else cout<<" "<<p.x<<" "<<p.y;
-    } cout<<endl;
+        
+        cout<<v.size()<<endl;
+        for(auto &p : v){
+            cout<<p.x<<" "<<p.y<<endl;
+        }
+    }
     
-    for(int i = 0; i<pontos.size(); i++){
-        if(!i) cout<<pontos[i];
-        else cout<<" "<<pontos[i];
-    } cout<<endl;
 }
