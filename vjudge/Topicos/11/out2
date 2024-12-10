@@ -1,0 +1,378 @@
+814,815c814,815
+<      Citizen at (-379,-424) is safe.
+<      Citizen at (197,342) is safe.
+---
+>      Citizen at (-379,-424) is robbed.
+>      Citizen at (197,342) is robbed.
+817,819c817,819
+<      Citizen at (192,-243) is safe.
+<      Citizen at (124,-446) is safe.
+<      Citizen at (368,-140) is safe.
+---
+>      Citizen at (192,-243) is robbed.
+>      Citizen at (124,-446) is robbed.
+>      Citizen at (368,-140) is robbed.
+821c821
+<      Citizen at (-337,-251) is safe.
+---
+>      Citizen at (-337,-251) is robbed.
+823c823
+<      Citizen at (-57,-36) is safe.
+---
+>      Citizen at (-57,-36) is robbed.
+825,826c825,826
+<      Citizen at (449,-283) is safe.
+<      Citizen at (54,130) is safe.
+---
+>      Citizen at (449,-283) is neither.
+>      Citizen at (54,130) is robbed.
+828,829c828,829
+<      Citizen at (210,323) is safe.
+<      Citizen at (90,264) is safe.
+---
+>      Citizen at (210,323) is robbed.
+>      Citizen at (90,264) is robbed.
+831,835c831,835
+<      Citizen at (181,477) is safe.
+<      Citizen at (425,-467) is safe.
+<      Citizen at (-413,-128) is safe.
+<      Citizen at (-78,-262) is safe.
+<      Citizen at (412,455) is safe.
+---
+>      Citizen at (181,477) is robbed.
+>      Citizen at (425,-467) is neither.
+>      Citizen at (-413,-128) is robbed.
+>      Citizen at (-78,-262) is robbed.
+>      Citizen at (412,455) is neither.
+837c837
+<      Citizen at (-351,-426) is safe.
+---
+>      Citizen at (-351,-426) is robbed.
+839,841c839,841
+<      Citizen at (478,-218) is safe.
+<      Citizen at (-1,-426) is safe.
+<      Citizen at (204,116) is safe.
+---
+>      Citizen at (478,-218) is neither.
+>      Citizen at (-1,-426) is robbed.
+>      Citizen at (204,116) is robbed.
+843,844c843,844
+<      Citizen at (66,-62) is safe.
+<      Citizen at (393,286) is safe.
+---
+>      Citizen at (66,-62) is robbed.
+>      Citizen at (393,286) is robbed.
+846,848c846,848
+<      Citizen at (323,-312) is safe.
+<      Citizen at (412,178) is safe.
+<      Citizen at (240,-63) is safe.
+---
+>      Citizen at (323,-312) is robbed.
+>      Citizen at (412,178) is robbed.
+>      Citizen at (240,-63) is robbed.
+850,851c850,851
+<      Citizen at (144,-339) is safe.
+<      Citizen at (35,87) is safe.
+---
+>      Citizen at (144,-339) is robbed.
+>      Citizen at (35,87) is robbed.
+853,854c853,854
+<      Citizen at (291,-126) is safe.
+<      Citizen at (157,-230) is safe.
+---
+>      Citizen at (291,-126) is robbed.
+>      Citizen at (157,-230) is robbed.
+856,868c856,868
+<      Citizen at (-427,-345) is safe.
+<      Citizen at (89,238) is safe.
+<      Citizen at (-324,-351) is safe.
+<      Citizen at (126,-345) is safe.
+<      Citizen at (191,259) is safe.
+<      Citizen at (447,123) is safe.
+<      Citizen at (491,-297) is safe.
+<      Citizen at (140,358) is safe.
+<      Citizen at (47,230) is safe.
+<      Citizen at (81,-185) is safe.
+<      Citizen at (402,382) is safe.
+<      Citizen at (-81,-385) is safe.
+<      Citizen at (-11,443) is safe.
+---
+>      Citizen at (-427,-345) is robbed.
+>      Citizen at (89,238) is robbed.
+>      Citizen at (-324,-351) is robbed.
+>      Citizen at (126,-345) is robbed.
+>      Citizen at (191,259) is robbed.
+>      Citizen at (447,123) is robbed.
+>      Citizen at (491,-297) is neither.
+>      Citizen at (140,358) is robbed.
+>      Citizen at (47,230) is robbed.
+>      Citizen at (81,-185) is robbed.
+>      Citizen at (402,382) is robbed.
+>      Citizen at (-81,-385) is robbed.
+>      Citizen at (-11,443) is robbed.
+871,872c871,872
+<      Citizen at (492,-254) is safe.
+<      Citizen at (485,-69) is safe.
+---
+>      Citizen at (492,-254) is neither.
+>      Citizen at (485,-69) is neither.
+875c875
+<      Citizen at (109,396) is safe.
+---
+>      Citizen at (109,396) is robbed.
+878,881c878,881
+<      Citizen at (293,-302) is safe.
+<      Citizen at (428,150) is safe.
+<      Citizen at (465,-470) is safe.
+<      Citizen at (412,8) is safe.
+---
+>      Citizen at (293,-302) is robbed.
+>      Citizen at (428,150) is robbed.
+>      Citizen at (465,-470) is neither.
+>      Citizen at (412,8) is robbed.
+885c885
+<      Citizen at (-172,-409) is safe.
+---
+>      Citizen at (-172,-409) is robbed.
+887,889c887,889
+<      Citizen at (-102,-491) is safe.
+<      Citizen at (-220,-489) is safe.
+<      Citizen at (362,169) is safe.
+---
+>      Citizen at (-102,-491) is robbed.
+>      Citizen at (-220,-489) is robbed.
+>      Citizen at (362,169) is robbed.
+891,892c891,892
+<      Citizen at (-299,-340) is safe.
+<      Citizen at (-95,-347) is safe.
+---
+>      Citizen at (-299,-340) is robbed.
+>      Citizen at (-95,-347) is robbed.
+894,898c894,898
+<      Citizen at (51,389) is safe.
+<      Citizen at (419,470) is safe.
+<      Citizen at (-333,-295) is safe.
+<      Citizen at (-49,330) is safe.
+<      Citizen at (350,-329) is safe.
+---
+>      Citizen at (51,389) is robbed.
+>      Citizen at (419,470) is neither.
+>      Citizen at (-333,-295) is robbed.
+>      Citizen at (-49,330) is robbed.
+>      Citizen at (350,-329) is robbed.
+900c900
+<      Citizen at (230,270) is safe.
+---
+>      Citizen at (230,270) is robbed.
+903,917c903,917
+<      Citizen at (269,-365) is safe.
+<      Citizen at (-6,162) is safe.
+<      Citizen at (247,-179) is safe.
+<      Citizen at (-19,249) is safe.
+<      Citizen at (92,449) is safe.
+<      Citizen at (350,77) is safe.
+<      Citizen at (-35,443) is safe.
+<      Citizen at (102,-410) is safe.
+<      Citizen at (486,-117) is safe.
+<      Citizen at (403,-40) is safe.
+<      Citizen at (131,-64) is safe.
+<      Citizen at (265,252) is safe.
+<      Citizen at (22,485) is safe.
+<      Citizen at (-144,-315) is safe.
+<      Citizen at (443,-241) is safe.
+---
+>      Citizen at (269,-365) is robbed.
+>      Citizen at (-6,162) is robbed.
+>      Citizen at (247,-179) is robbed.
+>      Citizen at (-19,249) is robbed.
+>      Citizen at (92,449) is robbed.
+>      Citizen at (350,77) is robbed.
+>      Citizen at (-35,443) is robbed.
+>      Citizen at (102,-410) is robbed.
+>      Citizen at (486,-117) is neither.
+>      Citizen at (403,-40) is robbed.
+>      Citizen at (131,-64) is robbed.
+>      Citizen at (265,252) is robbed.
+>      Citizen at (22,485) is robbed.
+>      Citizen at (-144,-315) is robbed.
+>      Citizen at (443,-241) is robbed.
+920c920
+<      Citizen at (222,389) is safe.
+---
+>      Citizen at (222,389) is robbed.
+922,924c922,924
+<      Citizen at (-25,-297) is safe.
+<      Citizen at (-30,419) is safe.
+<      Citizen at (51,-486) is safe.
+---
+>      Citizen at (-25,-297) is robbed.
+>      Citizen at (-30,419) is robbed.
+>      Citizen at (51,-486) is robbed.
+927c927
+<      Citizen at (-197,-411) is safe.
+---
+>      Citizen at (-197,-411) is robbed.
+930c930
+<      Citizen at (108,480) is safe.
+---
+>      Citizen at (108,480) is robbed.
+932c932
+<      Citizen at (322,154) is safe.
+---
+>      Citizen at (322,154) is robbed.
+934,936c934,936
+<      Citizen at (8,-284) is safe.
+<      Citizen at (295,-329) is safe.
+<      Citizen at (198,-271) is safe.
+---
+>      Citizen at (8,-284) is robbed.
+>      Citizen at (295,-329) is robbed.
+>      Citizen at (198,-271) is robbed.
+938,939c938,939
+<      Citizen at (230,-328) is safe.
+<      Citizen at (377,92) is safe.
+---
+>      Citizen at (230,-328) is robbed.
+>      Citizen at (377,92) is robbed.
+941,944c941,944
+<      Citizen at (4,171) is safe.
+<      Citizen at (-50,414) is safe.
+<      Citizen at (323,307) is safe.
+<      Citizen at (-70,165) is safe.
+---
+>      Citizen at (4,171) is robbed.
+>      Citizen at (-50,414) is robbed.
+>      Citizen at (323,307) is robbed.
+>      Citizen at (-70,165) is robbed.
+946c946
+<      Citizen at (237,228) is safe.
+---
+>      Citizen at (237,228) is robbed.
+949c949
+<      Citizen at (-345,-346) is safe.
+---
+>      Citizen at (-345,-346) is robbed.
+952,955c952,955
+<      Citizen at (261,214) is safe.
+<      Citizen at (76,-274) is safe.
+<      Citizen at (318,-320) is safe.
+<      Citizen at (341,-47) is safe.
+---
+>      Citizen at (261,214) is robbed.
+>      Citizen at (76,-274) is robbed.
+>      Citizen at (318,-320) is robbed.
+>      Citizen at (341,-47) is robbed.
+957,959c957,959
+<      Citizen at (138,-155) is safe.
+<      Citizen at (342,74) is safe.
+<      Citizen at (429,-349) is safe.
+---
+>      Citizen at (138,-155) is robbed.
+>      Citizen at (342,74) is robbed.
+>      Citizen at (429,-349) is neither.
+961,968c961,968
+<      Citizen at (190,-237) is safe.
+<      Citizen at (-47,-58) is safe.
+<      Citizen at (191,262) is safe.
+<      Citizen at (416,249) is safe.
+<      Citizen at (433,346) is safe.
+<      Citizen at (-15,432) is safe.
+<      Citizen at (145,-155) is safe.
+<      Citizen at (71,436) is safe.
+---
+>      Citizen at (190,-237) is robbed.
+>      Citizen at (-47,-58) is robbed.
+>      Citizen at (191,262) is robbed.
+>      Citizen at (416,249) is robbed.
+>      Citizen at (433,346) is robbed.
+>      Citizen at (-15,432) is robbed.
+>      Citizen at (145,-155) is robbed.
+>      Citizen at (71,436) is robbed.
+970,973c970,973
+<      Citizen at (-137,-421) is safe.
+<      Citizen at (-6,147) is safe.
+<      Citizen at (492,-323) is safe.
+<      Citizen at (-59,-369) is safe.
+---
+>      Citizen at (-137,-421) is robbed.
+>      Citizen at (-6,147) is robbed.
+>      Citizen at (492,-323) is neither.
+>      Citizen at (-59,-369) is robbed.
+975,983c975,983
+<      Citizen at (295,-131) is safe.
+<      Citizen at (133,488) is safe.
+<      Citizen at (-70,-325) is safe.
+<      Citizen at (127,-415) is safe.
+<      Citizen at (24,-380) is safe.
+<      Citizen at (157,-267) is safe.
+<      Citizen at (355,-44) is safe.
+<      Citizen at (-9,-359) is safe.
+<      Citizen at (-423,-311) is safe.
+---
+>      Citizen at (295,-131) is robbed.
+>      Citizen at (133,488) is robbed.
+>      Citizen at (-70,-325) is robbed.
+>      Citizen at (127,-415) is robbed.
+>      Citizen at (24,-380) is robbed.
+>      Citizen at (157,-267) is robbed.
+>      Citizen at (355,-44) is robbed.
+>      Citizen at (-9,-359) is robbed.
+>      Citizen at (-423,-311) is robbed.
+985,986c985,986
+<      Citizen at (22,383) is safe.
+<      Citizen at (29,-37) is safe.
+---
+>      Citizen at (22,383) is robbed.
+>      Citizen at (29,-37) is robbed.
+988,989c988,989
+<      Citizen at (337,-290) is safe.
+<      Citizen at (234,271) is safe.
+---
+>      Citizen at (337,-290) is robbed.
+>      Citizen at (234,271) is robbed.
+991,996c991,996
+<      Citizen at (-13,-282) is safe.
+<      Citizen at (-107,-38) is safe.
+<      Citizen at (47,417) is safe.
+<      Citizen at (228,211) is safe.
+<      Citizen at (444,261) is safe.
+<      Citizen at (407,-426) is safe.
+---
+>      Citizen at (-13,-282) is robbed.
+>      Citizen at (-107,-38) is robbed.
+>      Citizen at (47,417) is robbed.
+>      Citizen at (228,211) is robbed.
+>      Citizen at (444,261) is robbed.
+>      Citizen at (407,-426) is neither.
+998,1003c998,1003
+<      Citizen at (487,-412) is safe.
+<      Citizen at (341,483) is safe.
+<      Citizen at (56,-415) is safe.
+<      Citizen at (-262,-448) is safe.
+<      Citizen at (258,275) is safe.
+<      Citizen at (486,68) is safe.
+---
+>      Citizen at (487,-412) is neither.
+>      Citizen at (341,483) is robbed.
+>      Citizen at (56,-415) is robbed.
+>      Citizen at (-262,-448) is robbed.
+>      Citizen at (258,275) is robbed.
+>      Citizen at (486,68) is neither.
+1005,1008c1005,1008
+<      Citizen at (284,-91) is safe.
+<      Citizen at (127,-332) is safe.
+<      Citizen at (130,-229) is safe.
+<      Citizen at (378,211) is safe.
+---
+>      Citizen at (284,-91) is robbed.
+>      Citizen at (127,-332) is robbed.
+>      Citizen at (130,-229) is robbed.
+>      Citizen at (378,211) is robbed.
+1010c1010
+<      Citizen at (128,-205) is safe.
+---
+>      Citizen at (128,-205) is robbed.
+1012c1012
+<      Citizen at (352,-275) is safe.
+---
+>      Citizen at (352,-275) is robbed.

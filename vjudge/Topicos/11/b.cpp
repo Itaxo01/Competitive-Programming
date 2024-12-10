@@ -4,7 +4,8 @@ using namespace std;
 
 struct point {
     int x, y, id;
-
+    point(int a, int b): x(a), y(b), id(0) {}
+    point(): x(0), y(0), id(0) {}
     bool operator == (point const& t) const {
         return x == t.x && y == t.y;
     }
@@ -14,8 +15,8 @@ struct point {
 };
 
 struct vec {
-    point a, b;
-    vec(point a, point b): a(a), b(b) {}
+    int x, y;
+    vec(point a, point b): x(b.x-a.x), y(b.y-a.y) {}
 };
 
 bool cmp(point &a, point &b){
@@ -70,25 +71,18 @@ int dist(point &a, point &b){
     return (a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y);
 }
 
-int norm_sq(point &a){
-    return a.x*a.x+a.y*a.y;
+
+double dot(vec a, vec b) {
+    return a.x*b.x + a.y*b.y;
 }
 
-int dot(point &ab, point &cb){
-    return (ab.x*cb.x + ab.y*cb.y);
+double norm_sq(vec v) {
+    return v.x*v.x + v.y*v.y;
 }
 
-double angle(point &a, point &b, point &c){
-    point ab = {b.x - a.x, b.y - a.y};
-    point cb = {b.x - c.x, b.y - c.y};
-
-    double dt = dot(ab, cb);
-
-    double abSqr = norm_sq(ab);
-    double cbSqr = norm_sq(cb);
-
-    double cosSqr = dt*dt / abSqr / cbSqr;
-    return acos(dot(ba, bc)/sqrt(norm_sq(ba)*norm_sq(bc)));
+double angle(const point &a, const point &o, const point &b) {
+    vec oa = vec(o, a), ob = vec(o, b);
+    return acos(dot(oa, ob) / sqrt(norm_sq(oa) * norm_sq(ob)));
 }
 
 bool insidePolygon(point pt, vector<point> &p) {
@@ -138,7 +132,6 @@ int main(){
     while(true){
         int a, b, c; cin>>a>>b>>c;
         if(!a && !b && !c) break;
-        if(count>1) cout<<endl;
         vector<point> cops;
         vector<point> robbers;
         vector<point> citizens;
@@ -147,28 +140,34 @@ int main(){
             point p; cin>>p.x>>p.y;
             cops.push_back(p);
         }
-        convex_hull(cops, true);
+        if(cops.size() > 3) convex_hull(cops);
+        else convex_hull(cops, true);
 
         for(int i = 0; i<b; i++){
             point p; cin>>p.x>>p.y;
             robbers.push_back(p);
         }
-        convex_hull(robbers, true);        
+        if(cops.size() > 3) convex_hull(robbers);
+        else convex_hull(robbers, true);
+        // for(auto p: cops)
+        //     printf("%d, %d\n", p.x, p.y);
 
         for(int i = 0; i<c; i++){
             point p; cin>>p.x>>p.y;
             citizens.push_back(p);
         }
-        printf("Data set %d:\n", count++);
-        
-        cout<<insidePolygon(citizens[0], cops)<<endl;
 
-        // for(auto &p:citizens){
-        //     printf("     Citizen at (%d, %d) is ", p.x, p.y);
-        //     if(insidePolygon(p, cops) == 1) cout<<"safe.\n";
-        //     else if(insidePolygon(p, robbers) == 1) cout<<"robbed.\n";
-        //     else cout<<"neither.\n";
-        // }
+        // cout<<insidePolygon(point(478,-218), cops)<<endl;
+
+        printf("Data set %d:\n", count++);
+
+        for(auto &p:citizens){
+            printf("     Citizen at (%d,%d) is ", p.x, p.y);
+            if(insidePolygon(p, cops) == 1) cout<<"safe.\n";
+            else if(insidePolygon(p, robbers) == 1) cout<<"robbed.\n";
+            else cout<<"neither.\n";
+        }
+        cout<<endl;
     }
     
 }
