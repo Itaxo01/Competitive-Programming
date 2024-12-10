@@ -36,6 +36,7 @@ bool cw(point a, point b, point c, bool include_collinear = false) {
 bool collinear(point a, point b, point c) { return orientation(a, b, c) == 0; }
 
 void convex_hull(vector<point>& a, bool include_collinear = false) {
+    if(a.size() <= 2) return;
     point p0 = *min_element(a.begin(), a.end(), [](point a, point b) {
         return make_pair(a.y, a.x) < make_pair(b.y, b.x);
     });
@@ -69,46 +70,48 @@ int dist(point &a, point &b){
     return (a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y);
 }
 
-int norm_sq(vec &v){
-    return dist(v.a, v.b);
+int norm_sq(point &a){
+    return a.x*a.x+a.y*a.y;
 }
 
-int dot(vec &a, vec &b){
-    return (a.a.x - a.b.x)*(b.a.x - b.b.x) + (a.a.y - a.b.y)*(b.a.y - b.b.y);
+int dot(point &ab, point &cb){
+    return (ab.x*cb.x + ab.y*cb.y);
 }
 
 double angle(point &a, point &b, point &c){
-    vec ba = vec(b, a), bc = vec(b, c);
+    point ab = {b.x - a.x, b.y - a.y};
+    point cb = {b.x - c.x, b.y - c.y};
+
+    double dt = dot(ab, cb);
+
+    double abSqr = norm_sq(ab);
+    double cbSqr = norm_sq(cb);
+
+    double cosSqr = dt*dt / abSqr / cbSqr;
     return acos(dot(ba, bc)/sqrt(norm_sq(ba)*norm_sq(bc)));
 }
 
 bool insidePolygon(point pt, vector<point> &p) {
     int n = p.size();
-    if (n <= 2) return false;
+    if(n <= 2) return false;
     bool on_polygon = false;
     
     for (int i = 0; i < n-1; i++){
-        int d1, d2, d3;
-        d1 = (dist(p[i], pt) + dist(pt, p[i+1]) - dist(p[i], p[i+1])); 
-        if (d1 == 0){
-            on_polygon = true;
-            break;
-        }
-        d2 = (dist(p[i], p[i+1]) + dist(pt, p[i+1]) - dist(p[i], pt));
-        if (d2 == 0){
-            on_polygon = true;
-            break;
-        }
-        d3 = 
-        if (d3 == 0){
-            on_polygon = true;
-            break;
+        if(collinear(p[i], pt, p[i+1])){
+            if(pt.x == p[i].x && pt.x == p[i+1].x){
+                if((pt.y <= p[i].y && pt.y >= p[i+1].y) ||
+                    (pt.y <= p[i+1].y && pt.y >= p[i].y)){
+                        return true;
+                    }
+            } else {
+                if((pt.x <= p[i].x && pt.x >= p[i+1].x) ||
+                    (pt.x <= p[i+1].x && pt.x >= p[i].x)){
+                        return true;
+                    }
+            }
         }
     }
-        
     
-    if (on_polygon) return true;
-
     double sum = 0.0;
     for (int i = 0; i < n-1; ++i) {
         if (orientation(pt, p[i], p[i+1]) == 1)
@@ -135,45 +138,37 @@ int main(){
     while(true){
         int a, b, c; cin>>a>>b>>c;
         if(!a && !b && !c) break;
+        if(count>1) cout<<endl;
         vector<point> cops;
         vector<point> robbers;
         vector<point> citizens;
 
-        unordered_set<point> cops_s;
-        unordered_set<point> robbers_s;
-        unordered_set<point> citizens_s;
-
-
         for(int i = 0; i<a; i++){
             point p; cin>>p.x>>p.y;
-            if(cops_s.find(p) != cops_s.end()) continue;
             cops.push_back(p);
-            cops_s.insert(p);
         }
         convex_hull(cops, true);
 
         for(int i = 0; i<b; i++){
             point p; cin>>p.x>>p.y;
-            if(robbers_s.find(p) != robbers_s.end()) continue;
             robbers.push_back(p);
-            robbers_s.insert(p);
         }
-        convex_hull(robbers, true);
+        convex_hull(robbers, true);        
 
         for(int i = 0; i<c; i++){
             point p; cin>>p.x>>p.y;
-            if(citizens_s.find(p) != citizens_s.end()) continue;
             citizens.push_back(p);
-            citizens_s.insert(p);
         }
         printf("Data set %d:\n", count++);
         
-        for(auto &p:citizens){
-            printf("     Citizen at (%d, %d) is ", p.x, p.y);
-            if(insidePolygon(p, cops) == 1) cout<<"safe.\n";
-            else if(insidePolygon(p, robbers) == 1) cout<<"robbed.\n";
-            else cout<<"neither.\n";
-        }
+        cout<<insidePolygon(citizens[0], cops)<<endl;
+
+        // for(auto &p:citizens){
+        //     printf("     Citizen at (%d, %d) is ", p.x, p.y);
+        //     if(insidePolygon(p, cops) == 1) cout<<"safe.\n";
+        //     else if(insidePolygon(p, robbers) == 1) cout<<"robbed.\n";
+        //     else cout<<"neither.\n";
+        // }
     }
     
 }
