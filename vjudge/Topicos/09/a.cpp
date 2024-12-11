@@ -1,57 +1,86 @@
 #include <bits/stdc++.h>
-#define ii pair<int, int>
-#define ici pair<pair<int, char>, int>
 #define INF 1e9
+#define ii pair<int, int>
+
 using namespace std;
 
-int dijkstra(int a, int b, vector<vector<vector<pair<int, char>>>> &v){
-	vector<pair<int, char>> dist(v.size(), pair<int, char>(INF, '.'));
-	dist[a].first = 0;
-	priority_queue<ici, vector<ici>, greater<ici>> pq;
-	pq.push({dist[a], a});
+int dijkstra(int a, int b, vector<vector<ii>> &v){
+	vector<int> dist(v.size(), INF); 
+	dist[a] = 0;
+	priority_queue<ii, vector<ii>, greater<ii>> pq;
+	pq.push({0, a});
 	while(!pq.empty()){
 		auto p = pq.top(); pq.pop();
-		int d = p.first.first, u = p.second;
-		if(d > dist[u].first) continue;
-		for(int i = 0; i<v[u].size(); i++){
-			for(auto e: v[u][i]){
-				if (dist[u].second == e.second) continue;
-				if(dist[u].first+e.first < dist[i].first){
-					dist[i].first = dist[u].first+e.first;
-					dist[i].second = e.second;
-					pq.push({dist[i], i});
-				}
+		int d = p.first, u = p.second;
+		if(d > dist[u]) continue;
+		for(auto e: v[p.second]){
+			if(dist[u]+e.second < dist[e.first]){
+				dist[e.first] = dist[u]+e.second;
+				pq.push({dist[e.first], e.first});
 			}
 		}
 	}
-	return dist[b].first;
+	return dist[b];
 }
 
 int main(){
 	while(true){
 		int a; cin>>a;
 		if(!a) break;
-		map<string, int> m;
-		string s1, s2; cin>>s1>>s2;
-		m[s1] = m.size();
-		m[s2] = m.size();
-		vector<vector<string>> input(a);
+		string s_in, s_fim; cin>>s_in>>s_fim;
+		map<string, int> palavras;
+
+		map<string, vector<string>> m1; // Palavras de cada lingua 1
+		map<string, vector<string>> m2; // Palavras de cada lingua 2
+
+		vector<vector<ii>> graph(a+2);
 		for(int i = 0; i<a; i++){
-			string s3, s4, s5; cin>>s3>>s4>>s5;
-			input[i] = {s3, s4, s5};
-			if(m.find(s3) == m.end()) m[s3] = m.size();
-			if(m.find(s4) == m.end()) m[s4] = m.size();
+			string s1, s2, s3; cin>>s1>>s2>>s3;
+			int b = palavras[s3] = palavras.size()+1;
+			for(string e: m1[s2]){
+				if(e[0] == s3[0]) continue;
+				int e1 = palavras[e];
+				graph[e1].push_back({b, s3.size()});
+				graph[b].push_back({e1, e.size()});
+			}
+			for(string e: m2[s1]){
+				if(e[0] == s3[0]) continue;
+				int e1 = palavras[e];
+				graph[e1].push_back({b, s3.size()});
+				graph[b].push_back({e1, e.size()});
+			}
+			for(string e: m2[s2]){
+				if(e[0] == s3[0]) continue;
+				int e1 = palavras[e];
+				graph[e1].push_back({b, s3.size()});
+				graph[b].push_back({e1, e.size()});
+			}
+			for(string e: m1[s1]){
+				if(e[0] == s3[0]) continue;
+				int e1 = palavras[e];
+				graph[e1].push_back({b, s3.size()});
+				graph[b].push_back({e1, e.size()});
+			}
+			m1[s1].push_back(s3);
+			m2[s2].push_back(s3);
 		}
-		int V = m.size();
-		vector<vector<vector<pair<int, char>>>> v(V, vector<vector<pair<int, char>>>(V));
-		for(int i = 0; i<a; i++){
-			string s3 = input[i][0], s4 = input[i][1], s5 = input[i][2];
-			v[m[s3]][m[s4]].push_back({s5.size(), s5[0]});
-			v[m[s4]][m[s3]].push_back({s5.size(), s5[0]});
-		}
+		for(string e: m1[s_in])
+			graph[0].push_back({palavras[e], e.size()});
+		for(string e: m2[s_in])
+			graph[0].push_back({palavras[e], e.size()});
+		for(string e: m1[s_fim])
+			graph[palavras[e]].push_back({a+1, 0});
+		for(string e: m2[s_fim])
+			graph[palavras[e]].push_back({a+1, 0});
 		
-		int ans = dijkstra(m[s1], m[s2], v);
-		if(ans >= INF) cout<<"impossivel"<<endl;
-		else cout<<ans<<endl;	
+		// for(int i = 0; i<graph.size(); i++){
+		// 	cout<<"Vertice "<<i<<endl;;
+		// 	for(auto e: graph[i]){
+		// 		cout<<e.first<<" "<<e.second<<endl;
+		// 	}
+		// }
+		int res = dijkstra(0, a+1, graph);
+		if(res >= INF) cout<<"impossivel\n";
+		else cout<<res<<"\n";
 	}
 }
