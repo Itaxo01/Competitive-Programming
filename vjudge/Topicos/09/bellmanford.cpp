@@ -3,12 +3,13 @@
 #define INF 1000000000
 using namespace std;
 
-bool bellmmanford(vector<vector<ii>> &v){ // check if there is a a negative cycle
+bool ncycle(int a, vector<vector<ii>> &v){ // check if there is a a negative cycle
 	vector<int> dist(v.size(), INF);
+	dist[a] = 0;
 	for(int i = 0; i<v.size()-1; i++){
 		for(int u = 0; u<v.size(); u++)
 			for(int j = 0; j<v[u].size(); j++){
-				ii aux = v[i][j];
+				ii aux = v[u][j];
 				dist[aux.first] = min(dist[aux.first], dist[u] + aux.second);
 		}
 	}
@@ -16,13 +17,14 @@ bool bellmmanford(vector<vector<ii>> &v){ // check if there is a a negative cycl
 	for(int i = 0; i<v.size(); i++){
 		for(int j = 0; j<v[i].size(); j++){
 			ii aux = v[i][j];
-			if(dist[aux.first] > dist[j]+aux.second){
+			if(dist[aux.first] > dist[i]+aux.second){
 				return true;
 			}
 		}
 	}
 	return false;
 }
+
 
 int main(){
 	int tt; cin>>tt; while(tt--){

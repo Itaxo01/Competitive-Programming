@@ -1,8 +1,4 @@
 #include <bits/stdc++.h>
-#define ll long long
-#define pii array<int,2>
-#define nx(i) (i+1)%n
-#define pv(i) (i-1+n)%n
 using namespace std;
 
 struct point {
@@ -13,14 +9,6 @@ struct point {
     }
     bool operator < (point const& t) const {
         return x < t.x || (x == t.x && y < t.y);
-    }
-
-	 point operator+(const point &p) {
-        return {x + p.x, y + p.y};
-    }
-
-    point operator-(const point &p) {
-        return {x - p.x, y - p.y};
     }
 };
 
@@ -67,59 +55,41 @@ void convex_hull(vector<point>& a, bool include_collinear = false) {
     a = st;
 }
 
-double dist(point &a, point &b){
-	 return (a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y);
+int dist(point &a, point &b){
+    return (b.x-a.x)*(b.x-a.x) + (b.y-a.y)*(b.y-a.y);
 }
 
-int cross(point p1, point p2) {
-    return p1.x * p2.y - p1.y * p2.x;
-}
-
-double maior_dist(vector<point> &p){
-    int n = p.size();
-    if(n < 2) return 0;
-    else if(n == 2) return dist(p[0], p[1]);
-    else{
-        int i = n-1, j = 0, k = 1;
-        double res = 0;
-        while(abs(cross(p[j]-p[i], p[k+1]-p[i]) >
-                  abs(cross(p[j]-p[i], p[k]-p[i])))){
-            k++;
-        }
-        i = 0, j = k;
-        while(i <= k && j < n){
-            res = max(dist(p[i], p[j]), res);
-            while(j<n-1 && abs(cross(p[i+1]-p[i], p[j+1]-p[i]) >
-                      abs(cross(p[i+1]-p[i], p[j]-p[i])))){
-                j++;
-                res = max(dist(p[i], p[j]), res);
-            }
-            i++;
-        }
-        return res;
+int maxDist(vector<point> &p){
+    // Vai receber um vetor de pontos ordenados ccw por causa do convex hull (espero)
+    int a = 0, b = 0;
+    for(int i = 0; i<p.size(); i++){
+        // Vai achar o ponto mais distante do ponto 0
+        if(dist(p[a], p[i]) > dist(p[b], p[a])) b = i;
     }
+    // A ideia é que o ponto mais distante de i+1 será ou b, b+1 ou b+2
+    // Se for b mantém-se b, se for b+1, b = b+1, se for b+2, b = b+2
+    int maior_dist = dist(p[0], p[b]);
+    for(int i = 0; i<p.size(); i++){
+        int b1 = dist(p[i], p[b]);
+        int b2 = dist(p[i], p[(b+1+p.size() + p.size())%p.size()]);
+        int b3 = dist(p[i], p[(b+2+p.size() + p.size())%p.size()]);
+        if(b2 > b1){
+            if(b3 > b2) b = (b+2)%p.size();
+            else b = (b+1)%p.size();
+        } else if(b3 > b1){
+            b = (b+2)%p.size();
+        }
+        maior_dist = max(maior_dist, max(b1, max(b2, b3)));
+    }
+    return maior_dist;
 }
 
 int main(){
     int n; cin>>n;
-    vector<point> v(n);
+    vector<point> p(n);
     for(int i = 0; i<n; i++){
-        cin>>v[i].x>>v[i].y;
+        cin>>p[i].x>>p[i].y;
     }
-    convex_hull(v, true);
-
-	//  long long maior_dist = 0;
-	//  for(int i = 0; i<v.size(); i++){
-	// 	for(int j = 0; j<v.size(); j++){
-	// 		if (i == j) continue;
-	// 		maior_dist = max(maior_dist, dist(v[i], v[j]));
-	// 	}
-	//  }
-	//  printf("%.8lf\n", sqrt(maior_dist));
-
-
-	double res = maior_dist(v);
-
-	printf("%.8lf\n", sqrt(res));
-	 return 0;
+    convex_hull(p);
+    printf("%.9f\n", sqrt(maxDist(p)));
 }
