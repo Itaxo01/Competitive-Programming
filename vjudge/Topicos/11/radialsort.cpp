@@ -29,7 +29,11 @@ bool cw(point a, point b, point c, bool include_collinear) {
 }
 bool collinear(point a, point b, point c) { return orientation(a, b, c) == 0; }
 
-int main(){
+void radial_sort(vector<point>& a, bool include_collinear = false) {
+    point p0 = *min_element(a.begin(), a.end(), [](point a, point b) {
+        return make_pair(a.y, a.x) < make_pair(b.y, b.x); // search the entire vector for the lowest (y, x) point
+    });
+    
     sort(a.begin(), a.end(), [&p0](const point& a, const point& b) {
         int o = orientation(p0, a, b);
         if (o == 0)
@@ -37,4 +41,8 @@ int main(){
                 < (p0.x-b.x)*(p0.x-b.x) + (p0.y-b.y)*(p0.y-b.y);
         return o < 0;
     });
+}
+
+int main(){
+    
 }
