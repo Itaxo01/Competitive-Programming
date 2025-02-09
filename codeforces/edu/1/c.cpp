@@ -1,68 +1,100 @@
 #include <bits/stdc++.h>
-#define ld long double
 using namespace std;
 
-struct point{
-	public:
-		ld x, y;
-		point(ld a = 0, ld b = 0){
-			x = a;
-			y = b;
-		}
-		bool operator < (const point& a) const{
-			return x < a.x || (x == a.x && y < a.y);
-		}
+struct point {
+    int x, y;
+    point(int a = 0, int b = 0){
+		x = a, y = b;
+	 }
+    bool operator == (point const& t) const {
+        return x == t.x && y == t.y;
+    }
+    bool operator < (point const& t) const {
+        return x < t.x || (x == t.x && y < t.y);
+    }
 };
 
-int quad(point a) {
-	if(a.x >= 0) {
-		if(a.y >= 0) return 1;
-		return 4;
-	}
-	if(a.y >= 0) return 2;
+int q(point a){
+	if(a.y >= 0 and a.x > 0) return 0;
+	if(a.y > 0 and a.x <= 0) return 1;
+	if(a.y <= 0 and a.x < 0) return 2;
 	return 3;
 }
 
-point axis = {0, 0};
-
-bool cmp(point a, point b){
-	int q1 = quad(a), q2 = quad(b);
-	if(q1 != q2) return q1 < q2;
-	int cross = a.x*b.y - b.x*a.y;
-	return cross > 0;
+int orientation(point a, point b, point c) {
+    int v = a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y); // cross product between two vectors in R2, can be extracted from the matrix
+                                                          // i j k determinant, where k is 1. The two vectors are (c, a) and (c, b),
+                                                          // c acts as the origin. 
+    if (v < 0) return -1; // going from (c, a) to (c, b), if the cross product is negative there is a right curve, so (c, b) is
+                          // clockwise based on (c, a)
+    if (v > 0) return +1; // same thing but left curve, so (c, b) is counter-clockwise based on (c, a)
+    return 0; // otherwise they are collinear
 }
 
-ld mag(point a){
-	return sqrt(a.x*a.x + a.y*a.y);
+bool cw(point a, point b, point c, bool include_collinear) {
+    int o = orientation(a, b, c); // we can sort clockwise (cw) or counter-clockwise(ccw), the only thing that changes is the next line
+    return o < 0 || (include_collinear && o == 0); // works as a comparation function, returns true if vector (c, a) is less than (c, b),
+                                                  // wich means true if (c, a) takes a right turn to get to (c, b). Include collinear is trivial
+}
+bool collinear(point a, point b, point c) { return orientation(a, b, c) == 0; }
+
+void radial_sort(vector<point>& a) {
+	 // for the convex hull, p0 is the lowest (y, x) point
+	 // here it is the origin.
+    point p0 = (0, 0);
+    
+    sort(a.begin(), a.end(), [&p0](const point& a, const point& b) {
+        int qa = q(a), qb = q(b);
+		  if(qa != qb) return qa < qb;
+		
+		  int o = orientation(p0, a, b);
+        if (o == 0)
+            return (p0.x-a.x)*(p0.x-a.x) + (p0.y-a.y)*(p0.y-a.y)
+                < (p0.x-b.x)*(p0.x-b.x) + (p0.y-b.y)*(p0.y-b.y);
+        return o > 0; 
+    });
 }
 
-ld angle(point a, point b){
-	ld dot = a.x*b.x + a.y*b.y;
-	ld m = mag(a) * mag(b);
-	return acos(dot/m);
+long double angle(const point& a, const point& b) {
+    // Convert to long double for precision
+    long double dot = (long double)a.x * b.x + (long double)a.y * b.y;
+    long double cross = (long double)a.x * b.y - (long double)a.y * b.x;
+    // atan2 returns the signed angle in radians; use fabs if smallest unsigned angle is desired
+    return atan2(fabs(cross), dot);
 }
 
-signed main(){
+int main(){
 	int n; cin>>n;
-	vector<point> v(n);
-	map<point, int> mp;
-	for(int i = 0; i<n; i++){
-		ld a, b; cin>>a>>b;
-		v[i] = {a, b};
-		mp[v[i]] = mp.size();
+	vector<point> p(n);
+	map<point, int> m;
+	for(int i = 0; i < n; i++){
+		point a; cin>>a.x>>a.y;
+		m[a] = m.size();
+		p[i] = a;
 	}
-	sort(v.begin(), v.end(), cmp);
+	// cout<<"Before sort:\n";
+	// for(int i = 0; i<n; i++){
+	// 	printf("%d, %d %d\n", p[i].x, p[i].y, m[p[i]]);
+	// }
+	// cout<<"\n";
+	
 
-	ld menor = angle(v[n-1], v[0]);
-	if(isnan(menor)) menor = 4;
-	vector<int> menores = {mp[v[n-1]], mp[v[0]]};
+	radial_sort(p);
+	// cout<<"After sort:\n";
+	// for(int i = 0; i<n; i++){
+	// 	printf("%d, %d\n", p[i].x, p[i].y);
+	// }
+	// cout<<"\n";
+	long double min_angle = angle(p[n-1], p[0]);
+	point min_a = p[0], min_b = p[n-1];
 	for(int i = 0; i<n-1; i++){
-		ld ang = angle(v[i], v[i+1]);
-		if(ang < menor){
-			menor = ang;
-			menores[0] = mp[v[i]]; menores[1] = mp[v[i+1]];
+		long double c = angle(p[i], p[i+1]); // biggest the cosine is, smallest the angle, since it just increases from pi to 0.
+		
+		if(c < min_angle) {
+			min_angle = c;
+			min_a = p[i];
+			min_b = p[i+1];
 		}
 	}
-
-	cout<<menores[0]+1<<" "<<menores[1]+1<<endl;
+	cout<<m[min_a]+1<<" "<<m[min_b]+1<<endl;
 }
