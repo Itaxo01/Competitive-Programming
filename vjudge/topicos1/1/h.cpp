@@ -1,26 +1,96 @@
 #include <bits/stdc++.h>
+#define int long long
 using namespace std;
-/*IDEAS: 
-	Instead of focusing on the direction of the switch, we can store just a value for each position that
-	is the sum up until this point, where the we sum the right turns and subtract the left ones. We can 
-	already store this value mod s.size() (remember that -1 mod 5 == 4 mod 5), that is what matters.
-	
-	After that, we need to determine for which values of dislocation the string s remains the same
-	for example:
-		abab -> rotate two times to the right -> abab -> rotate more two times -> abab. Which means
-		both 2 mod 4 and 0 mod 4 results on the string beeing the same
-	With that in mind, if, for instance, the only value where of rotation that is equal to the original
-	is 0 mod n, we know that, in the interval between two k mod n the sum total is 0 mod n, which means
-	+1 on the final answer. We can just count the number of times a num k appears on the vector (during
-	a interval without inverting).
-	But, if more numbers*/
-int main(){
+
+vector<int> prefix_function(string &s) {
+	int n = (int)s.length();
+	vector<int> pi(n);
+	for (int i = 1; i < n; i++) {
+		int j = pi[i-1];
+		while (j > 0 && s[i] != s[j])
+			j = pi[j-1];
+		if (s[i] == s[j])
+			j++;
+		pi[i] = j;
+	}
+	return pi;
+}
+
+int mod(int a, int b){
+	return (((a%b)+b)%b);
+}
+int kmp(string &t, string &p){
+	vector<int> lps = prefix_function(t);
+	int i = 0;
+	int j = 0;
+	int pos = -1;
+	while (i < t.size()) {
+		if (t[i] == p[j]) {
+			i++;
+			j++;
+			if (j == p.size()) {
+				pos = i-j;
+				j = lps[j-1];
+				break;
+			}
+		} else {
+			if (j != 0) {
+				j = lps[j-1];
+			} else {
+				i++;
+			}
+		}
+	}
+	return pos;
+}
+
+signed main(){
 	string s; cin>>s;
-	int n; cin>>n;
-	for(int i = 0; i<n; i++){
+	int tt; cin>>tt;
+	int n = s.size();
+	vector<int> pi = prefix_function(s);
+	int period = n - pi[n-1];
+	if(n%period == 0){
+		n = period;
+		s = s.substr(0, period);
+	}
+	int sum = 0;
+	bool inverted = false;
+	
+	vector<int> v(n, 0);
+
+	string s_inverted = s;
+	reverse(s_inverted.begin(), s_inverted.end());
+	string aux = s+s;
+	int pos = kmp(aux, s_inverted);	
+	
+	int res = 0;
+	v[0]++;
+	vector<int> invertidos(n);
+	for(int i = 0; i<tt; i++){
 		char c; cin>>c;
 		if(c != 'I'){
 			int b; cin>>b;
+			if(c == 'R') sum = mod((sum+b), n);
+			else sum = mod((sum-b), n);
+		} else {
+			sum = mod(-sum, n);
+			inverted = !inverted;
+		}
+		
+		if(!inverted){
+			res += v[sum];
+			v[sum]++;
+		} else{
+			if(pos != -1){
+				res += v[mod(-sum+pos, n)];
+				v[mod(-sum+pos, n)]++;
+			} else {
+				res += invertidos[sum];
+				invertidos[sum]++;
+				
+			}
 		}
 	}
+	cout<<res<<endl;
 }
