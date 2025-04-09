@@ -1,18 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-bool work(){
-    string s; cin>>s;
-    for(int i = 0; i<s.size()-1; i++){
-        if(s.substr(i, 2) == "it") return true;
-    }
-    return false;
-}
-
 int main(){
-    int n; cin>>n;
-    while(n--){
-        if(work()) cout<<"YES\n";
-        else cout<<"NO\n";
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+    int n = 1e5;
+    cout<<n<<endl;
+    for(int i = 1; i<n; i++){
+        cout<<1<<" "<<i+1<<endl;
     }
 }

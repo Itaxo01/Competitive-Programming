@@ -62,12 +62,13 @@ int main(){
 				int pos = elements;
 				while(elements < max_elements){
 					int last = entrada[pos];
-					pos_num[v[last]]--;
-					if(pos_num[v[last]] == 0) pos_num.erase(v[last]);
-					v[last]++;
-					pos_num[v[last]]++;
-					elements++;
-					pos++;
+					auto it = pos_num.find(v[last]);
+					(*it).second--;
+					if((*it).second == 0) pos_num.erase(it);
+					++v[last];
+					++pos_num[v[last]];
+					++elements;
+					++pos;
 				}
 				left_right = !left_right;
 				int front = 0;
@@ -78,17 +79,19 @@ int main(){
 						maior = max(maior, small*b);
 					}
 					int add = entrada[j];
-					pos_num[v[add]]--;
-					if(pos_num[v[add]] == 0) pos_num.erase(v[add]);
-					v[add]++;
-					pos_num[v[add]]++;
+					auto it = pos_num.find(v[add]);
+					(*it).second--;
+					if((*it).second == 0) pos_num.erase(it);
+					++v[add];
+					++pos_num[v[add]];
 	
 					int remove = entrada[front];
-					pos_num[v[remove]]--;
-					if(pos_num[v[remove]] == 0) pos_num.erase(v[remove]);
-					v[remove]--;
-					pos_num[v[remove]]++;
-					front++;
+					it = pos_num.find(v[remove]);
+					(*it).second--;
+					if((*it).second == 0) pos_num.erase(it);
+					--v[remove];
+					++pos_num[v[remove]];
+					++front;
 				}
 				int small = (*pos_num.begin()).first;
 				int big = (*prev(pos_num.end())).first;
@@ -99,34 +102,37 @@ int main(){
 				int pos = a-elements-1;
 				while(elements < max_elements){
 					int last = entrada[pos];
-					pos_num[v[last]]--;
-					if(pos_num[v[last]] == 0) pos_num.erase(v[last]);
-					v[last]++;
-					pos_num[v[last]]++;
-					elements++;
-					pos--;
+					auto it = pos_num.find(v[last]);
+					(*it).second--;
+					if((*it).second == 0) pos_num.erase(it);
+					++v[last];
+					++pos_num[v[last]];
+					++elements;
+					--pos;
 				}
 				left_right = !left_right;
 
 				int back = a-1;
-				for(int j = pos; j>=0; j--){
+				for(int j = pos; j>=0; --j){
 					int small = (*pos_num.begin()).first;
 					int big = (*prev(pos_num.end())).first;
 					if(small == big) {					
 						maior = max(maior, small*b);
 					}
 					int add = entrada[j];
-					pos_num[v[add]]--;
-					if(pos_num[v[add]] == 0) pos_num.erase(v[add]);
-					v[add]++;
-					pos_num[v[add]]++;
+					auto it = pos_num.find(v[add]);
+					(*it).second--;
+					if((*it).second == 0) pos_num.erase(it);
+					++v[add];
+					++pos_num[v[add]];
 	
 					int remove = entrada[back];
-					pos_num[v[remove]]--;
-					if(pos_num[v[remove]] == 0) pos_num.erase(v[remove]);
-					v[remove]--;
-					pos_num[v[remove]]++;
-					back--;
+					it = pos_num.find(v[remove]);
+					(*it).second--;
+					if((*it).second == 0) pos_num.erase(it);
+					--v[remove];
+					++pos_num[v[remove]];
+					--back;
 				}
 			}
 			int small = (*pos_num.begin()).first;
