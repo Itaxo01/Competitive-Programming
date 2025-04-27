@@ -1,34 +1,64 @@
 #!/usr/bin/env bash
-# filepath: /home/kauanfank/Codes/Competitive-Programming/vjudge/topicos1/1/teste.sh
 
-# Compile your code (update filenames as needed)
-g++ f.cpp -o f.out
+# Usage: ./test_set.sh <LETTER>
+# Example: ./test_set.sh A
 
-# Make sure we compiled successfully
-if [ $? -ne 0 ]; then
-    echo "Compilation failed."
-    exit 1
+letter="$1"
+
+trap cleanup EXIT INT
+# Cleanup
+cleanup() {
+  echo "Cleaning done"
+  for inputFile in "${letter}/input/"*; do
+    testName=$(basename "$inputFile")
+    if [ -f "/tmp/${testName}.out" ]; then
+      rm "/tmp/${testName}.out"
+    fi
+  done
+  rm -f "${letter}temp"
+  trap - EXIT
+  exit 1
+}
+
+
+# Compile the program
+g++ -std=c++20 -O2 "${letter}.cpp" -o "${letter}temp"
+
+if [ ! -f "${letter}temp" ]; then
+  echo "Compilation failed."
+  exit 1
 fi
 
-# Variable to count the number of successful comparisons
-pass_count=0
+count=0
+testCount=0
 
-# Execute and compare outputs
-for input_file in F/input/*; do
-    base_name=$(basename "$input_file")
-    output_file="F/output/$base_name"
-    
-    ./f.out < "$input_file" > temp_output
-    
-    if diff -b temp_output "$output_file"; then
-        # Increment pass_count using arithmetic expansion
-        pass_count=$((pass_count + 1))
-    else
-        echo "Fail in file: $base_name"
-    fi
+# For each input file in e.g. A/input/A__*
+for inputFile in "${letter}/input/"*; do
+  # Skip if no matching files
+  [ -e "$inputFile" ] || continue
+
+  testCount=$((testCount+1))
+  testName=$(basename "$inputFile")
+  echo "Running test $testName"
+  # Run and store output in temporary file
+  start_time=$(date +%s%N)
+  "./${letter}temp" < "$inputFile" > "/tmp/${testName}.out"
+  end_time=$(date +%s%N)
+
+  tempo_file=$(( (end_time - start_time) / 1000000 ))
+  # Compare with expected output
+  if diff -q "/tmp/${testName}.out" "${letter}/output/${testName}" >/dev/null; then
+    count=$((count+1))
+    echo "Passed in $tempo_file ms"
+  else
+    echo "Mismatch in test: $testName"
+    echo "Expected output: "
+    cat "${letter}/output/${testName}"
+    echo "Actual output: "
+    cat "/tmp/${testName}.out"
+  fi
 done
 
-# Cleanup
-rm -f temp_output
+echo "Passed $count/$testCount tests."
 
-echo "Total passes: $pass_count"
+

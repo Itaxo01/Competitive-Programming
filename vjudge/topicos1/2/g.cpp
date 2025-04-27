@@ -1,105 +1,134 @@
 #include <bits/stdc++.h>
 #define ld long double
+#define EPS 1e-9
 using namespace std;
-
-struct vec{
-	ld x, y;
-	vec(point a, point b){
-		x = b.x-a.x; y = b.y-a.y;
-	}
-};
-
-struct line{
-	point a, b;
-	line(point k1, point k2){
-		if(k1.x < k2.x){
-			a = k1, b = k2;
-		} else if(k1.x == k2.x){
-			if(k1.y < k2.y){
-				a = k1, b = k2;
-			} else a = k2, b = k1;
-		} else a = k2, b = k1;
-	}
-	line(line l1, line l2){
-		point low = (max(min(l1.a, l2.a), min(l1.b, l2.b)));
-		point high = (min(max(l1.a, l2.a), max(l1.b, l2.b)));
-		a = low, b = high;
-	}
-};
 
 struct point{
 	ld x, y;
 	point(ld a = 0, ld b = 0){
-		x = a; y = b;
+		x = a, y = b;
 	}
-	bool operator<(point& a) {
-		return (x < a.x) || (x == a.x && y < a.y);
-	}
-	bool operator<=(point& a){
-		return (x == a.x && y == a.y) || 
-				((x < a.x) || (x == a.x && y < a.y));
+
+	bool operator<(const point &p) const{
+		return x < p.x || (x == p.x && y < p.y);
 	}
 };
 
-bool collinear(point a, point b, point c){
-	// a, b, c, mAB = mBC
-	// (b.y-a.y)/(b.x-a.x) = (c.y-b.y)/(c.x-b.x)
-	// (b.x-a.x)*(c.y-b.y) = (b.y-a.y)*(c.x-b.x)
-	return (b.x-a.x)*(c.y-b.y) == (b.y-a.y)*(c.x-b.x);
+
+struct line{
+	ld a, b;
+	ld min_x, max_x;
+	ld min_y, max_y;
+	line(point p1, point p2){
+		min_x = min(p1.x, p2.x);
+		max_x = max(p1.x, p2.x);
+		if(min_x != max_x){
+			a = (p1.y-p2.y)/(p1.x-p2.x);
+			b = p1.y-a*p1.x;
+		} else{
+			a = 1;
+			b = p1.y-p1.x;
+		}
+
+		min_y = min_x*a + b;
+		max_y = max_x*a + b;
+	}
+	line(line l1, line l2){
+		a = l1.a; b = l1.b;
+		min_x = max(l1.min_x, l2.min_x);
+		max_x = min(l1.max_x, l2.max_x);
+		min_y = min_x*a + b;
+		max_y = max_x*a + b;
+	}
+	line(line l1, line l2, bool concurrent){
+		a = l1.a; b = l1.b;
+		int x = (l2.b-l1.b)/(l1.a-l2.a);
+		min_x = x;
+		max_x = x;
+
+		min_y = min_x*a + b;
+		max_y = max_x*a + b;
+	}
+
+	bool operator<(const line& l) const{
+		return a < l.a || 
+			(a == l.a && b < l.b || 
+			(a == l.a && b == l.b && min_x < l.min_x ||
+			(a == l.a && b == l.b && min_x == l.min_x && max_x < l.max_x ||
+			(a == l.a && b == l.b && min_x == l.min_x && max_x == l.max_x && min_y < l.min_y ||
+			(a == l.a && b == l.b && min_x == l.min_x && max_x == l.max_x && min_y == l.min_y && max_y < l.max_y)))));
+	}
+};
+
+bool collinear(line l1, line l2){
+	if(l1.a == l2.a && l1.b == l2.b){
+		int min_x = max(l1.min_x, l2.min_x);
+		int max_x = min(l1.max_x, l2.max_x);
+		return min_x <= max_x;
+	} return false;
 }
 
-bool point_in_line(point p, line l){
-	if(!collinear(l.a, l.b, p)) return false;
-	return (p.x>=min(l.a.x, l.b.x) && p.x <=max(l.a.x, l.b.x));
+bool concurrent(line l1, line l2){
+	if(l1.a != l2.a){
+		int x = (l2.b-l1.b)/(l1.a-l2.a);
+		if(x >= l1.min_x && x <= l1.max_x && x >= l2.min_x && x <= l2.max_x){
+			return true;
+		}
+	}
+	return false;
+}
+bool is_integer(ld x){
+	return (x - x/1)<EPS;
 }
 
-int cross(vec a, vec b){
-	return a.x*b.y - a.y*b.x;
-}
-
-bool concurrent_lines(line l1, line l2){
-	vec v1(l1.a, l1.b);
-	vec v2(l2.a, l2.b);
-	if(cross(v1, v2) != 0) return false;
-	
-}
-
-bool are_points = false;
 int main(){
 	int a; cin>>a;
-	vector<line> lines;
-	vector<point> points;
-	for(int i = 0; i<a; i++){
-		int b, c, r; cin>>b>>c>>r;
+	int b, c, r; cin>>b>>c>>r;
+	point k1(b-r, c), k2(b, c+r), k3(b+r, c), k4(b, c-r);
+	line l1(k1, k2), l2(k2, k3), l3(k3, k4), l4(k4, k1);
+	
+	set<line> linhas = {l1, l2, l3, l4};
+	for(int i = 1; i<a; i++){
+		cin>>b>>c>>r;
 		point k1(b-r, c), k2(b, c+r), k3(b+r, c), k4(b, c-r);
 		line l1(k1, k2), l2(k2, k3), l3(k3, k4), l4(k4, k1);
-		vector<line> lines_aux = {l1, l2, l3, l4};
-		if(i == 0){
-			lines = lines_aux;
-		} else {
-			if(are_points){
-				vector<point> aux;
-				for(auto e: points){
-					for(auto l: lines_aux){
-						if(point_in_line(e, l)) aux.push_back(e);
-					}
+		set<line> linhas_aux = {l1, l2, l3, l4};
+
+		set<line> new_lines;
+		for(auto l1: linhas){
+			// cout<<"l1: "<<l1.a<<" "<<l1.b<<" ("<<l1.min_x<<","<<l1.max_x<<")\n";
+			for(auto l2:linhas_aux){
+				if(collinear(l1, l2)){
+					line l3(l1, l2);
+					// cout<<"Collinear\n";
+					// cout<<l2.a<<" "<<l2.b<<" ("<<l2.min_x<<","<<l2.max_x<<")\n";
+					// cout<<l3.a<<" "<<l3.b<<" ("<<l3.min_x<<","<<l3.max_x<<")\n";
+					new_lines.insert(l3);
 				}
-				points = aux;
-			} else{
-				vector<line> new_lines;
-				for(auto l1: lines){
-					for(auto l2: lines_aux){
-						if(concurrent_lines(l1, l2)) {
-							new_lines.push_back(line(l1, l2));
-						} else if(intersept_lines(l1, l2)) {
-							are_points = true;
-							points.push_back(intersept(l1, l2));
-						}
-					}
+				else if(concurrent(l1, l2)){
+					line l3(l1, l2, true);
+					// cout<<"Concurrent\n";
+					// cout<<l2.a<<" "<<l2.b<<" ("<<l2.min_x<<","<<l2.max_x<<")\n";
+					// cout<<l3.a<<" "<<l3.b<<" ("<<l3.min_x<<","<<l3.max_x<<")\n";
+					new_lines.insert(l3);
 				}
-				lines = new_lines;
 			}
 		}
+		linhas = new_lines;
+		// for(auto l:linhas){
+		// 	cout<<l.a<<" "<<l.b<<" ("<<l.min_x<<","<<l.max_x<<")\n";
+		// }
+		cout<<endl;
+	}
+	set<point> pontos;
+	for(auto l:linhas){
+		for(int x = l.min_x; x<=l.max_x; x++){
+			ld y = x*l.a+l.b;
+			if(is_integer(y)) pontos.insert(point(x, y));
+		}
+	}
+	for(auto e: pontos){
+		cout<<e.x<<" "<<e.y<<endl;
 	}
 }
 
