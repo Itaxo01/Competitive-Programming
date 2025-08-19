@@ -55,6 +55,8 @@ int main(){
 		F(4) = F(1)^6 * F(2)^7 = 139968
 			                  ^ esse número surge da acomulação dos fatores descendo na árvore, o F(3, 1) tem o expoente 2, que se multiplica quando chega no F(2, 1) com o expoente 2 para virar 4, e se soma com o F(2, 2) com o expoente 3 para virar 7 
 		F(5) = F(1)^12 * F(2)^14 
+
+		Da para representar isso como uma matriz de um sistema, cada linha de 1 a n terá somente sua posição i em 1 e o resto em n, e a 
 		
 	*/
 	// Isso nos dá uma dica de que a solução envolve desmembrar o número maior em seus fatores de 1 a N, porém isso ainda precisa ser feito de forma no máximo logaritmica.
